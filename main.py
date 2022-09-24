@@ -2,20 +2,16 @@ import pygame
 import sys
 
 pygame.init()
-font = pygame.font.Font("fonts/unifont-13.0.06.ttf", 16)
 
-screen = pygame.display.set_mode((600, 400))
-screen.fill((255, 255, 255))
-pygame.display.set_caption("西操赶五教")
+import font
+import titlepage
 
-text = font.render("开始游戏 Start Game 114514", True, (0, 0, 0), (255, 255, 255))
-textRect = text.get_rect()
-textRect.center = (300, 200)
-screen.blit(text, textRect)
+screen = pygame.display.set_mode((500, 800))
+
+game_mode = 1
 
 while True:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            sys.exit()
-    pygame.display.flip()
+    if game_mode == 0:
+        exit(0)
+    elif game_mode == 1:
+        titlepage.execute(screen, font.font)
