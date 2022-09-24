@@ -1,10 +1,11 @@
 import pygame
+import os
 import sys
 import skin
 from button import Button
 import configfile
 
-background_img = pygame.image.load("pictures/TitlePage.jpg")
+background_img = pygame.image.load(os.path.join("assets", "TitlePage.jpg"))
 
 
 def execute(screen, font):
@@ -13,6 +14,9 @@ def execute(screen, font):
     def exit_game():
         main.game_mode = 0
 
+    def enter_about():
+        main.game_mode = 12
+
     screen.fill((255, 255, 255))
     screen.blit(background_img, (0, 0))
     pygame.display.set_caption("西操赶五教")
@@ -20,7 +24,7 @@ def execute(screen, font):
     screen.blit(skin.player_skin, (150, 733))
 
     button_start_game = Button(125, 300, "开始游戏")
-    button_about = Button(125, 375, f"游戏说明{'' if configfile.get_config('aboutRead') else ' (请仔细阅读)'}")
+    button_about = Button(125, 375, f"游戏说明{'' if configfile.get_config('aboutRead') else ' (请仔细阅读)'}", enter_about)
     button_exit = Button(125, 450, "退出游戏", exit_game)
     buttons = [button_start_game, button_about, button_exit]
 

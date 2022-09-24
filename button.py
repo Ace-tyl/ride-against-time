@@ -4,11 +4,12 @@ button.py 来源：https://blog.csdn.net/qq_41544842/article/details/125894587
 """
 
 import pygame
+import os
 import font
 
-imgNormal = pygame.image.load("pictures/ButtonNormal.png")
-imgMove = pygame.image.load("pictures/ButtonMove.png")
-imgDown = pygame.image.load("pictures/ButtonDown.png")
+imgNormal = pygame.image.load(os.path.join("assets", "ButtonNormal.png"))
+imgMove = pygame.image.load(os.path.join("assets", "ButtonMove.png"))
+imgDown = pygame.image.load(os.path.join("assets", "ButtonDown.png"))
 
 class Button:
     NORMAL = 0
