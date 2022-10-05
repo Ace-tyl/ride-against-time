@@ -14,7 +14,6 @@ def read_config():
         for i in range(0, len(cfg), 2):
             a = cfg[i]
             b = int(cfg[i + 1])
-            print(a, b)
             config[a] = b
     except:
         pass

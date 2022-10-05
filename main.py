@@ -11,6 +11,7 @@ import skin
 import titlepage
 import aboutpage
 import gameselector
+import game
 
 screen = pygame.display.set_mode((500, 800))
 
@@ -29,3 +30,5 @@ while True:
         aboutpage.execute(screen, font.font)
     elif game_mode == 11:
         gameselector.execute(screen, font.font)
+    elif game_mode == 114:
+        game.run_game(screen, font.font)
