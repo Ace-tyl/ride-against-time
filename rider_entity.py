@@ -1,1 +1,5 @@
-# To be done
+import pygame
+
+
+class RiderEntity:
+    pass

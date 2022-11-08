@@ -5,6 +5,7 @@ import configfile
 
 pygame.init()
 configfile.read_config()
+screen = pygame.display.set_mode((500, 800))
 
 import font
 import skin
@@ -13,11 +14,10 @@ import aboutpage
 import gameselector
 import game
 
-screen = pygame.display.set_mode((500, 800))
-
 iconfile = pygame.image.load(os.path.join("assets", "Icon.png"))
 iconfile.blit(skin.player_skin, (20, 10))
 pygame.display.set_icon(iconfile)
+print("前进！不顾一切地前进！")
 
 game_mode = 1
 
