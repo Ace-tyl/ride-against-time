@@ -5,12 +5,15 @@ import sys
 import gmath
 import terrain
 import bike_entity
+import configfile
+from button import Button
 
 mode = 0  # 0 表示限时，1 表示定距
 mode_str = ""
 lim = -1
 s_dist = 0  # 距离
 s_time = 0  # 时间
+rec_str = ""
 
 
 def meta_data_display(screen, font, me, fps):
@@ -21,6 +24,9 @@ def meta_data_display(screen, font, me, fps):
     lines.append("玩家生命值：{:.02f}/10.00".format(me.health))
     my_speed = me.get_accurate_speed()
     lines.append("玩家速度：{:.02f}m/s{}".format(my_speed / 50, "" if my_speed < 1e-3 else "（方向 {:03d}）".format(int(-gmath.rad_to_deg(me.player_dir) + 90) % 360)))
+    if me.mode == 1:
+        lines.append("单车最大速度：{:.02f}m/s".format(me.bike_speed / 50))
+        lines.append("刹车属性：{:.02f} // {:.02f}".format(me.ls, me.rs))
 
     cur_y = 5
     red = me.health <= 3.14159
@@ -59,14 +65,9 @@ def run_game(screen, font):
     key_return_time = 0
     object_bike = None
 
-    def time_out():
-        pass
-
     while True:
         current_time = time.time()
         s_time = int((current_time - start_time) * 1000)
-        if mode == 0 and s_time >= lim:
-            time_out()
 
         # Display data & entities
         # The player must be rendered at last
@@ -196,4 +197,86 @@ def run_game(screen, font):
         while len(bikes_r) and bikes_r[0].pos < s_dist - 314:
             bikes_r = bikes_r[1:]
 
+        # Judge player death
+        if me.health < 0:
+            main.game_mode = -me.health
+            return
+
+        # Judge game over
+        if s_time > lim:
+            main.game_mode = 1926
+            return
+
         last_time = current_time
+
+
+def game_over(screen, font, font_large):
+    from gameselector import background_img
+    import main
+
+    def go_back():
+        main.game_mode = 1
+
+    screen.fill((0, 0, 0))
+    bg_image = background_img
+    bg_image.set_alpha(192)
+    screen.blit(bg_image, (0, s_dist % 800))
+    screen.blit(bg_image, (0, s_dist % 800 - 800))
+
+    text = font_large.render("你寄了" if main.game_mode > 10000 else ("时间到" if mode == 0 else "到达终点"), True, (255, 255, 255))
+    textRect = text.get_rect()
+    textRect.center = (250, 144)
+    screen.blit(text, textRect)
+
+    if main.game_mode > 10000:
+        if main.game_mode == 10492:
+            text_str = "你太嗨了，冲出了道路"
+        elif main.game_mode == 10388:
+            text_str = "你甚至没有意识到这是一个卷轴游戏"
+        text = font.render(text_str, True, (255, 255, 255))
+        textRect = text.get_rect()
+        textRect.center = (250, 216)
+        screen.blit(text, textRect)
+
+    button_back = Button(125, 450, "返回主页面", go_back)
+    buttons = [button_back]
+
+    if mode == 0:
+        result = configfile.get_config(rec_str, -1)
+        text = font.render("{}：{:.02f}m".format("新纪录" if s_dist > result else "距离", s_dist / 50), True, (255, 128, 128) if s_dist > result else (255, 255, 255))
+        if s_dist > result:
+            configfile.change_config(rec_str, s_dist)
+            configfile.write_config()
+        textRect = text.get_rect()
+        textRect.center = (250, 256)
+        screen.blit(text, textRect)
+
+    pygame.display.flip()
+
+    while True:
+        mx, my = pygame.mouse.get_pos()  # 获取鼠标的位置
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.MOUSEMOTION:
+                for button in buttons:
+                    button.getFocus(mx, my)
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if pygame.mouse.get_pressed() == (1, 0, 0):
+                    for button in buttons:
+                        button.mouseDown(mx, my)
+            elif event.type == pygame.MOUSEBUTTONUP:
+                for button in buttons:
+                    button.mouseUp()
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    go_back()
+
+        pygame.time.delay(16)
+        for button in buttons:
+            button.draw(screen)  # 更新按钮状态
+        pygame.display.flip()
+        if main.game_mode < 1000:
+            return

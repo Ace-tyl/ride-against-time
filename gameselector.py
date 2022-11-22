@@ -14,7 +14,7 @@ passage = open(os.path.join("assets", "readme.txt"), "r").read()
 def get_record(s: str, mode):
     result = configfile.get_config(s, -1)
     if result == -1: return ""
-    if mode == 0: return f" (纪录 {result / 50}m)"
+    if mode == 0: return " (纪录 {:.02f}m)".format(result / 50)
     else: return " (纪录 {}:{:02d}.{:03d})".format(result // 60000, result % 60000 // 1000, result % 1000)
 
 
@@ -24,11 +24,12 @@ def execute(screen, font):
     def go_back():
         main.game_mode = 1
 
-    def game_10min():
+    def engame(ms, rs, lm):
         main.game_mode = 114
         game.mode = 0
-        game.lim = 600000
-        game.mode_str = "限时 10min"
+        game.lim = lm
+        game.mode_str = ms
+        game.rec_str = rs
 
     screen.fill((255, 255, 255))
     pygame.display.set_caption("西操赶五教 — 选择模式")
@@ -40,10 +41,10 @@ def execute(screen, font):
     screen.blit(text, textRect)
 
     button_back = Button(125, 735, "返回主页面", go_back)
-    button_gamemode_tl_1 = Button(125, 110, f"限时 10min{get_record('rec10min', 0)}", game_10min)
-    button_gamemode_tl_15 = Button(125, 170, f"限时 15min{get_record('rec15min', 0)}")
-    button_gamemode_tl_2 = Button(125, 230, f"限时 20min{get_record('rec20min', 0)}")
-    button_gamemode_tl_3 = Button(125, 290, f"限时 30min{get_record('rec30min', 0)}")
+    button_gamemode_tl_1 = Button(125, 110, f"限时 10min{get_record('rec10min', 0)}", lambda: engame("限时 10min", "rec10min", 600000))
+    button_gamemode_tl_15 = Button(125, 170, f"限时 15min{get_record('rec15min', 0)}", lambda: engame("限时 15min", "rec15min", 900000))
+    button_gamemode_tl_2 = Button(125, 230, f"限时 20min{get_record('rec20min', 0)}", lambda: engame("限时 20min", "rec20min", 1200000))
+    button_gamemode_tl_3 = Button(125, 290, f"限时 30min{get_record('rec30min', 0)}", lambda: engame("限时 30min", "rec30min", 1800000))
     button_gamemode_ds_1 = Button(125, 350, f"定距 1km{get_record('rec1km', 1)}")
     button_gamemode_ds_2 = Button(125, 410, f"定距 2km{get_record('rec2km', 1)}")
     button_gamemode_ds_3 = Button(125, 470, f"定距 3km{get_record('rec3km', 1)}")
@@ -69,6 +70,9 @@ def execute(screen, font):
             elif event.type == pygame.MOUSEBUTTONUP:
                 for button in buttons:
                     button.mouseUp()
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    go_back()
 
         pygame.time.delay(16)
         for button in buttons:

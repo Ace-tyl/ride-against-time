@@ -17,7 +17,6 @@ import game
 iconfile = pygame.image.load(os.path.join("assets", "Icon.png"))
 iconfile.blit(skin.player_skin, (20, 10))
 pygame.display.set_icon(iconfile)
-print("前进！不顾一切地前进！")
 
 game_mode = 1
 
@@ -32,3 +31,5 @@ while True:
         gameselector.execute(screen, font.font)
     elif game_mode == 114:
         game.run_game(screen, font.font)
+    elif game_mode > 1000:
+        game.game_over(screen, font.font, font.font_large)

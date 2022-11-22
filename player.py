@@ -7,23 +7,25 @@ from bike_entity import bike
 
 
 class Player:
-    mode = 0  # 0 表示玩家在走路状态，1 表示骑车状态
-    health = 10.0
-    pos_screen = np.array([250.0, 600.0])
-    speed = 60.0
-    speed_dir = np.array([0.0, 0.0])
-    player_dir = 0.0
-    being_damaged = 0
-    # Below is bike properties
-    bike_speed = 0
-    ls, rs = 0, 0
-    bike_ot = 0
+    def __init__(self):
+        self.mode = 0  # 0 表示玩家在走路状态，1 表示骑车状态
+        self.health = 10.0
+        self.pos_screen = np.array([250.0, 600.0])
+        self.speed = 60.0
+        self.speed_dir = np.array([0.0, 0.0])
+        self.player_dir = 0.0
+        self.being_damaged = 0
+        # Below is bike properties
+        self.bike_speed = 0
+        self.ls, self.rs = 0, 0
+        self.bike_ot = 0
 
-    def get_damage(self, value):
+    def get_damage(self, value, damage_type):
         if value <= 0: return
         self.being_damaged = 10
         self.health -= value
         if self.mode == 1: self.speed = 0.0
+        if self.health < 0: self.health = -damage_type
 
     def update_pos(self, delta_t):
         if not self.speed_dir[0] and not self.speed_dir[1]: return
@@ -37,9 +39,9 @@ class Player:
         x = max(x, 16)
         x = min(x, 484)
         y = min(y, 784)
-        if x <= 16: self.get_damage(-sx / (4000 if not self.mode else 40))  # 尝试越界，扣血
-        if x >= 484: self.get_damage(sx / (4000 if not self.mode else 40))
-        if y >= 784: self.get_damage(-sy / (4000 if not self.mode else 40))
+        if x <= 16: self.get_damage(-sx / (4000 if not self.mode else 40), 10492)  # 尝试越界，扣血
+        if x >= 484: self.get_damage(sx / (4000 if not self.mode else 40), 10492)
+        if y >= 784: self.get_damage(-sy / (4000 if not self.mode else 40), 10388)
         if y < 600:
             game.s_dist += 600 - y
             y = 600

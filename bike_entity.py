@@ -25,7 +25,7 @@ class bike:
             self.rs = rs
             self.open_t = ot
             return
-        self.speed = np.random.rand() * 150 + 200
+        self.speed = np.random.rand() * 120 + 180
         if np.random.randint(0, 20):
             self.ls = np.random.rand() * .2 + 1.2
         if np.random.randint(0, 20):

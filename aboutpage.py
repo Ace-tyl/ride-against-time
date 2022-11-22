@@ -124,6 +124,8 @@ def execute(screen, font):
                 if event.key == pygame.K_RIGHT and page != len(passage) - 1:
                     page += 1
                     refresh_page(page, passage, screen, font)
+                if event.key == pygame.K_ESCAPE:
+                    go_back()
 
         pygame.time.delay(16)
         for button in buttons:

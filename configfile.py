@@ -13,7 +13,10 @@ def read_config():
     try:
         for i in range(0, len(cfg), 2):
             a = cfg[i]
-            b = int(cfg[i + 1])
+            try:
+                b = int(cfg[i + 1])
+            except:
+                b = float(cfg[i + 1])
             config[a] = b
     except:
         pass
