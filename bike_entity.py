@@ -25,11 +25,11 @@ class bike:
             self.rs = rs
             self.open_t = ot
             return
-        self.speed = np.random.rand() * 2 + 4
+        self.speed = np.random.rand() * 150 + 200
         if np.random.randint(0, 20):
-            self.ls = np.random.rand() * 4 + 3
+            self.ls = np.random.rand() * .2 + 1.2
         if np.random.randint(0, 20):
-            self.rs = np.random.rand() * 4 + 3
+            self.rs = np.random.rand() * .2 + 1.2
         self.open_t = np.random.randn() * 4 + 4
         self.open_t = max(self.open_t, 3.0)
 

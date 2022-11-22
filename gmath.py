@@ -7,6 +7,10 @@ import numpy as np
 from numba import njit
 
 
+μ = np.float64(.25)
+g = np.float64(49)
+
+
 @njit
 def rad_to_deg(x):
     return x / np.pi * 180

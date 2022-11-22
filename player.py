@@ -23,6 +23,7 @@ class Player:
         if value <= 0: return
         self.being_damaged = 10
         self.health -= value
+        if self.mode == 1: self.speed = 0.0
 
     def update_pos(self, delta_t):
         if not self.speed_dir[0] and not self.speed_dir[1]: return
@@ -36,9 +37,9 @@ class Player:
         x = max(x, 16)
         x = min(x, 484)
         y = min(y, 784)
-        if x <= 16: self.get_damage(-sx / 4000)  # 尝试越界，扣血
-        if x >= 484: self.get_damage(sx / 4000)
-        if y >= 784: self.get_damage(-sy / 4000)
+        if x <= 16: self.get_damage(-sx / (4000 if not self.mode else 40))  # 尝试越界，扣血
+        if x >= 484: self.get_damage(sx / (4000 if not self.mode else 40))
+        if y >= 784: self.get_damage(-sy / (4000 if not self.mode else 40))
         if y < 600:
             game.s_dist += 600 - y
             y = 600
@@ -83,3 +84,16 @@ class Player:
     def get_accurate_speed(self):
         if not self.speed_dir[0] and not self.speed_dir[1]: return 0
         else: return self.speed
+
+    def update_speed(self, time_interval):
+        self.speed -= time_interval * gmath.μ * gmath.g  # f = μmg; f = μmg cos θ - mg sin θ
+        if self.speed < 0: self.speed = 0.0
+
+    def accelerate(self):
+        if self.speed > self.bike_speed: return
+        self.speed += (self.bike_speed - self.speed) / 10
+
+    def decelerate(self, is_l, is_r, time_interval):
+        if is_l: self.speed -= time_interval * self.ls * gmath.g
+        if is_r: self.speed -= time_interval * self.rs * gmath.g
+        if self.speed < 0: self.speed = 0.0
