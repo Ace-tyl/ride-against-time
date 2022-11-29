@@ -48,6 +48,10 @@ def execute(screen, font):
             elif event.type == pygame.MOUSEBUTTONUP:
                 for button in buttons:
                     button.mouseUp()
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    sys.exit()
 
         pygame.time.delay(16)
         for button in buttons:

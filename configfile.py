@@ -9,8 +9,8 @@ def get_config(s: str, default: int = 0):
 
 
 def read_config():
-    cfg = open(".114514", "r").read().split('\n')
     try:
+        cfg = open(".114514", "r").read().split('\n')
         for i in range(0, len(cfg), 2):
             a = cfg[i]
             try:

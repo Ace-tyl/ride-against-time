@@ -9,7 +9,7 @@ from button import Button
 
 background_img = pygame.image.load(os.path.join("assets", "AboutPage.jpg"))
 
-passage = open(os.path.join("assets", "readme.txt"), "r").read()
+passage = open(os.path.join("assets", "readme.txt"), "rb").read().decode("UTF-8")
 
 
 def splitLines(text):

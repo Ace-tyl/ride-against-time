@@ -142,9 +142,9 @@ def run_game(screen, font):
                             pass
                 elif event.key == pygame.K_SPACE:
                     if me.mode == 1: me.accelerate()
-                elif event.key == pygame.K_z:
+                elif event.key == pygame.K_q:
                     if me.mode == 1: is_sc_left = True
-                elif event.key == pygame.K_SLASH:
+                elif event.key == pygame.K_p:
                     if me.mode == 1: is_sc_right = True
             elif event.type == pygame.KEYUP:
                 if event.key == pygame.K_UP:
@@ -160,9 +160,9 @@ def run_game(screen, font):
                 elif event.key == pygame.K_RETURN:
                     is_key_return = False
                     key_return_time = 0
-                elif event.key == pygame.K_z:
+                elif event.key == pygame.K_q:
                     is_sc_left = False
-                elif event.key == pygame.K_SLASH:
+                elif event.key == pygame.K_p:
                     is_sc_right = False
 
         # Try get bike
@@ -197,13 +197,16 @@ def run_game(screen, font):
         while len(bikes_r) and bikes_r[0].pos < s_dist - 314:
             bikes_r = bikes_r[1:]
 
+        # Test collision
+        # TODO
+
         # Judge player death
         if me.health < 0:
             main.game_mode = -me.health
             return
 
         # Judge game over
-        if s_time > lim:
+        if mode == 0 and s_time > lim or mode == 1 and s_dist > lim:
             main.game_mode = 1926
             return
 
@@ -250,6 +253,18 @@ def game_over(screen, font, font_large):
         textRect = text.get_rect()
         textRect.center = (250, 256)
         screen.blit(text, textRect)
+
+    if mode == 1:
+        if main.game_mode <= 10000:
+            result = configfile.get_config(rec_str, -1)
+            if result == -1: result = 1e145
+            text = font.render("{}：{}:{:02d}.{:03d}".format("新纪录" if s_time < result else "用时", s_time // 60000, s_time % 60000 // 1000, s_time % 1000), True, (255, 128, 128) if s_time < result else (255, 255, 255))
+            if s_time < result:
+                configfile.change_config(rec_str, s_time)
+                configfile.write_config()
+            textRect = text.get_rect()
+            textRect.center = (250, 256)
+            screen.blit(text, textRect)
 
     pygame.display.flip()
 

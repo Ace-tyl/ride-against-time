@@ -35,3 +35,11 @@ def get_dir(x, y):
 @njit
 def get_dir_vector(dir):
     return np.array([np.sin(-dir), np.cos(-dir)])
+
+
+class Rectangle:
+    def __init__(self, x1, y1, x2, y2, x3, y3, x4, y4):
+        self.ul = np.array(x1, y1)
+        self.ur = np.array(x2, y2)
+        self.dl = np.array(x3, y3)
+        self.dr = np.array(x4, y4)
