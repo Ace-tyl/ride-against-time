@@ -8,8 +8,6 @@ from button import Button
 
 background_img = pygame.image.load(os.path.join("assets", "GameBackground.jpg"))
 
-passage = open(os.path.join("assets", "readme.txt"), "r").read()
-
 
 def get_record(s: str, mode):
     result = configfile.get_config(s, -1)

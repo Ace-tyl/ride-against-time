@@ -13,7 +13,7 @@ colors = [(255, 0, 0), (0, 255, 0), (0, 0, 255), (0, 255, 255), (255, 0, 255), (
 filling_rect = pygame.Rect((11, 1), (4, 59))
 
 for color in colors:
-    surface = pygame.Surface((25, 60))
+    surface = pygame.Surface((25, 60), flags=pygame.SRCALPHA)
     surface = surface.convert_alpha()
     surface.fill(color, filling_rect)
     surface.blit(bike_skin_npc_template, (0, 0))
