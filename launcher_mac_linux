@@ -1,0 +1,20 @@
+#!/bin/sh
+
+cd $(dirname $0)
+
+{
+  python3 main.py
+} || {
+  {
+    python3 -m pip install pygame
+  } || {
+    echo 运行错误！请检查你是否安装 python 3。
+    echo 若未安装，请在此下载并安装 python 3: https://www.python.org/downloads/release/python-3108
+    echo 请不要安装 python 3.11 及以上版本，因为 pygame 在这些版本下无法运行。
+    read -p "按 Enter 退出。"
+    exit
+  }
+  python3 -m pip install numpy
+  python3 -m pip install numba
+  python3 main.py
+}
