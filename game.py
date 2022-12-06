@@ -6,6 +6,7 @@ import gmath
 import terrain
 import bike_entity
 import configfile
+import walker_entity
 from button import Button
 
 mode = 0  # 0 表示限时，1 表示定距
@@ -56,6 +57,7 @@ def run_game(screen, font):
     frame_time = []
     bike_gen_l = terrain.bikes_generator()
     bike_gen_r = terrain.bikes_generator()
+    npc_gen = terrain.npc_generator()
 
     is_key_left = False
     is_key_right = False
@@ -73,10 +75,8 @@ def run_game(screen, font):
         # The player must be rendered at last
         screen.blit(background_img, (0, s_dist % 800))
         screen.blit(background_img, (0, s_dist % 800 - 800))
-        for entity in walkers: entity.render(screen)
-        for entity in riders: entity.render(screen)
-        for entity in bikes_l: entity.render(screen, s_dist)
-        for entity in bikes_r: entity.render(screen, s_dist)
+        for entity in bikes_l + bikes_r: entity.render(screen, s_dist)
+        for entity in walkers + riders: entity.render(screen)
         me.render(screen)
         time_interval = current_time - last_time
 
@@ -99,9 +99,9 @@ def run_game(screen, font):
                     return
                 elif event.key == pygame.K_UP:
                     if me.mode == 0: me.speed_dir[1] += 1.0
-                    else:
-                        me.player_dir = 0.0
-                        me.speed_dir = (0, 1)
+                    # else:
+                    #     me.player_dir = 0.0
+                    #     me.speed_dir = (0, 1)
                 elif event.key == pygame.K_LEFT:
                     if me.mode == 0: me.speed_dir[0] -= 1.0
                     else: is_key_left = True
@@ -142,9 +142,9 @@ def run_game(screen, font):
                             pass
                 elif event.key == pygame.K_SPACE:
                     if me.mode == 1: me.accelerate()
-                elif event.key == pygame.K_q:
+                elif event.key == pygame.K_z:
                     if me.mode == 1: is_sc_left = True
-                elif event.key == pygame.K_p:
+                elif event.key == pygame.K_SLASH:
                     if me.mode == 1: is_sc_right = True
             elif event.type == pygame.KEYUP:
                 if event.key == pygame.K_UP:
@@ -160,9 +160,9 @@ def run_game(screen, font):
                 elif event.key == pygame.K_RETURN:
                     is_key_return = False
                     key_return_time = 0
-                elif event.key == pygame.K_q:
+                elif event.key == pygame.K_z:
                     is_sc_left = False
-                elif event.key == pygame.K_p:
+                elif event.key == pygame.K_SLASH:
                     is_sc_right = False
 
         # Try get bike
@@ -197,8 +197,33 @@ def run_game(screen, font):
         while len(bikes_r) and bikes_r[0].pos < s_dist - 314:
             bikes_r = bikes_r[1:]
 
+        # Generate Walker NPC
+        gen_npc = npc_gen.generate_npcs(s_dist, time_interval)
+        if gen_npc is not None:
+            npc = walker_entity.WalkerEntity(gen_npc[0][0], gen_npc[0][1], gen_npc[1])
+            walkers.append(npc)
+
+        # Walker Move
+        for walker in walkers:
+            walker.update_pos(time_interval)
+
+        # Dispose Walker NPC
+        for walker in walkers:
+            if walker.pos_screen[1] < s_dist - 600 or walker.pos_screen[1] > s_dist + 1200:
+                walkers.remove(walker)
+
         # Test collision
-        # TODO
+        player_rect = me.get_rectangle()
+        for entity in bikes_l + bikes_r + walkers + riders:
+            rect = entity.get_rectangle()
+            if player_rect.intersect(rect):
+                relative_speed_vector = me.get_speed_vector() - entity.get_speed_vector()
+                relative_speed = gmath.get_abs(relative_speed_vector)
+                if me.get_accurate_speed() == 0: continue
+                if me.mode == 1:
+                    me.get_damage(relative_speed / 200, 19268)
+                else:
+                    me.get_damage((relative_speed - 70) / 60 * time_interval, 11451)
 
         # Judge player death
         if me.health < 0:
@@ -236,6 +261,10 @@ def game_over(screen, font, font_large):
             text_str = "你太嗨了，冲出了道路"
         elif main.game_mode == 10388:
             text_str = "你甚至没有意识到这是一个卷轴游戏"
+        elif main.game_mode == 19268:
+            text_str = "行车不规范，亲人两行泪"
+        elif main.game_mode == 11451:
+            text_str = "迎面走来的你，让我如此蠢蠢欲动"
         text = font.render(text_str, True, (255, 255, 255))
         textRect = text.get_rect()
         textRect.center = (250, 216)

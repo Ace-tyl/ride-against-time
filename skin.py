@@ -18,3 +18,11 @@ for color in colors:
     surface.fill(color, filling_rect)
     surface.blit(bike_skin_npc_template, (0, 0))
     bike_skin_npc.append(surface)
+
+npc_skins_count = 20
+npc_skins = []
+
+for i in range(1, npc_skins_count + 1):
+    npc_skin = pygame.image.load(os.path.join("skins", f"npc{i}.png"))
+    npc_skin = pygame.transform.scale(npc_skin, (25, 25)).convert_alpha()
+    npc_skins.append(npc_skin)

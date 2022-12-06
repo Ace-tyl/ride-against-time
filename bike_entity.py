@@ -2,6 +2,7 @@ import numpy as np
 import pygame
 import skin
 import game
+import gmath
 
 
 class bike:
@@ -51,3 +52,10 @@ class bike:
         bike_rect = nbike.get_rect()
         bike_rect.center = (nx, ny)
         screen.blit(nbike, bike_rect)
+
+    def get_speed_vector(self):
+        return np.array([0, 0])
+
+    def get_rectangle(self):
+        x, y = self.x, self.pos
+        return gmath.Rectangle(x - 30, y - 12, x + 30, y - 12, x + 30, y + 12, x - 30, y + 12)

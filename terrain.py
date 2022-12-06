@@ -54,3 +54,32 @@ class bikes_generator:
         if np.random.rand() > self.prob:
             bike_type = np.random.randint(1, len(bike_skin_npc))
         return self.dist, bike_type
+
+class npc_generator:
+    rho_max = 0.01
+
+    def __init__(self):
+        self.rho = 0.006
+        self.last_pos = 0
+
+    def generate_npcs(self, pos, delta_t):
+        self.rho += (pos - self.last_pos) * 5e-8
+        if self.rho > self.rho_max: self.rho = self.rho_max
+        prob = self.rho * (pos - self.last_pos)
+        d_value = min(0.5, abs((pos - self.last_pos) / delta_t - 60) / 120)
+        self.last_pos = pos
+        if np.random.rand() > delta_t / 2.5 + self.rho:
+            return None
+        qd_dir = 1 if np.random.rand() < d_value else -1
+        pdir = 0
+        while pdir != qd_dir:
+            if np.random.randint(0, 2):
+                p = (np.random.randint(40, 460), pos - 280)
+            else:
+                p = (np.random.randint(40, 460), pos + 680)
+            value = p[0] * np.random.rand() - (500 - p[0]) * np.random.rand()
+            if value < 0:
+                pdir = -1
+            else:
+                pdir = 1
+        return p, pdir

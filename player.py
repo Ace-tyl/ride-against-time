@@ -39,9 +39,9 @@ class Player:
         x = max(x, 16)
         x = min(x, 484)
         y = min(y, 784)
-        if x <= 16: self.get_damage(-sx / (4000 if not self.mode else 40), 10492)  # 尝试越界，扣血
-        if x >= 484: self.get_damage(sx / (4000 if not self.mode else 40), 10492)
-        if y >= 784: self.get_damage(-sy / (4000 if not self.mode else 40), 10388)
+        if x <= 16: self.get_damage(-sx / (60 / delta_t if not self.mode else 100), 10492)  # 尝试越界，扣血
+        if x >= 484: self.get_damage(sx / (60 / delta_t if not self.mode else 100), 10492)
+        if y >= 784: self.get_damage(-sy / (60 / delta_t if not self.mode else 100), 10388)
         if y < 600:
             game.s_dist += 600 - y
             y = 600
@@ -87,6 +87,10 @@ class Player:
         if not self.speed_dir[0] and not self.speed_dir[1]: return 0
         else: return self.speed
 
+    def get_speed_vector(self):
+        if not self.speed_dir[0] and not self.speed_dir[1]: return np.array([0, 0])
+        return gmath.rotate(np.array([0, self.speed]), self.player_dir)
+
     def update_speed(self, time_interval):
         self.speed -= time_interval * gmath.μ * gmath.g  # f = μmg; f = μmg cos θ - mg sin θ
         if self.speed < 0: self.speed = 0.0
@@ -99,3 +103,11 @@ class Player:
         if is_l: self.speed -= time_interval * self.ls * gmath.g
         if is_r: self.speed -= time_interval * self.rs * gmath.g
         if self.speed < 0: self.speed = 0.0
+
+    def get_rectangle(self):
+        x, y = self.pos_screen
+        y = 600 - self.pos_screen[1] + game.s_dist
+        if self.mode == 0:
+            return gmath.Rectangle(x - 12, y - 12, x + 12, y - 12, x + 12, y + 12, x - 12, y + 12).rotate(np.array([x, y]), self.player_dir)
+        else:
+            return gmath.Rectangle(x - 12, y - 30, x + 12, y - 30, x + 12, y + 30, x - 12, y + 30).rotate(np.array([x, y]), self.player_dir)
