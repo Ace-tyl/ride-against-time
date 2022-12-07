@@ -1,5 +1,6 @@
 import pygame
 import configfile
+import sys
 
 if __name__ == '__main__':
     pygame.init()
@@ -49,6 +50,7 @@ def splitLines(text):
                     tmpstrlen = len(word)
                 word = ''
                 tmpstr += ' '
+                tmpstrlen += 1
             else:
                 word += ch
         result.append(tmpstr)
