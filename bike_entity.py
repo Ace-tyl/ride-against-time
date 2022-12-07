@@ -58,4 +58,4 @@ class bike:
 
     def get_rectangle(self):
         x, y = self.x, self.pos
-        return gmath.Rectangle(x - 30, y - 12, x + 30, y - 12, x + 30, y + 12, x - 30, y + 12)
+        return gmath.Rectangle(x - 30, y - 6, x + 30, y - 6, x + 30, y + 6, x - 30, y + 6)

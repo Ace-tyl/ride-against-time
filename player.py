@@ -39,9 +39,9 @@ class Player:
         x = max(x, 16)
         x = min(x, 484)
         y = min(y, 784)
-        if x <= 16: self.get_damage(-sx / (60 / delta_t if not self.mode else 100), 10492)  # 尝试越界，扣血
-        if x >= 484: self.get_damage(sx / (60 / delta_t if not self.mode else 100), 10492)
-        if y >= 784: self.get_damage(-sy / (60 / delta_t if not self.mode else 100), 10388)
+        if x <= 16: self.get_damage(-sx / (60 / delta_t if not self.mode else 60), 10492)  # 尝试越界，扣血
+        if x >= 484: self.get_damage(sx / (60 / delta_t if not self.mode else 60), 10492)
+        if y >= 784: self.get_damage(-sy / (60 / delta_t if not self.mode else 60), 10388)
         if y < 600:
             game.s_dist += 600 - y
             y = 600

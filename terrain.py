@@ -68,7 +68,7 @@ class npc_generator:
         prob = self.rho * (pos - self.last_pos)
         d_value = min(0.5, abs((pos - self.last_pos) / delta_t - 60) / 120)
         self.last_pos = pos
-        if np.random.rand() > delta_t / 2.5 + self.rho:
+        if np.random.rand() > delta_t / 5 + self.rho * 3:
             return None
         qd_dir = 1 if np.random.rand() < d_value else -1
         pdir = 0

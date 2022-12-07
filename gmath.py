@@ -70,7 +70,8 @@ class Rectangle:
         return True
 
     def intersect(self, another):
-        return self.inside(another.ul) or self.inside(another.ur) or self.inside(another.dr) or self.inside(another.dl)
+        return self.inside(another.ul) or self.inside(another.ur) or self.inside(another.dr) or self.inside(another.dl) \
+            or another.inside(self.ul) or another.inside(self.ur) or another.inside(self.dr) or another.inside(self.dl)
 
     def rotate(self, point, degree):
         self.ul = rotate(self.ul - point, degree) + point

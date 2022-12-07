@@ -126,6 +126,8 @@ def run_game(screen, font):
                             is_key_return = True
                             key_return_time = current_time
                     else:
+                        if me.speed > 60:
+                            continue
                         try:
                             bike = me.dispose_bike()
                             if bike.lr == 0:
@@ -221,7 +223,8 @@ def run_game(screen, font):
                 relative_speed = gmath.get_abs(relative_speed_vector)
                 if me.get_accurate_speed() == 0: continue
                 if me.mode == 1:
-                    me.get_damage(relative_speed / 200, 19268)
+                    if me.speed > 60: me.get_damage(relative_speed**2 / 10000, 19268)
+                    else: me.get_damage((relative_speed - 70) / 200, 11451)
                 else:
                     me.get_damage((relative_speed - 70) / 60 * time_interval, 11451)
 

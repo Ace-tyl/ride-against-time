@@ -27,5 +27,6 @@ venv/
 .114514
 __*/
 build/
+dist/
 *.zip
 !launcher*
