@@ -207,7 +207,7 @@ def run_game(screen, font):
 
         # Walker Move
         for walker in walkers:
-            walker.update_pos(time_interval)
+            walker.update_pos(time_interval, me)
 
         # Dispose Walker NPC
         for walker in walkers:

@@ -53,7 +53,7 @@ def execute(screen, font):
                     pygame.quit()
                     sys.exit()
 
-        pygame.time.delay(16)
+        pygame.time.delay(50)
         for button in buttons:
             button.draw(screen)  # 更新按钮状态
         pygame.display.flip()
