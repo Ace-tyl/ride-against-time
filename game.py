@@ -1,6 +1,7 @@
 import pygame
 import player
 import time
+import os
 import sys
 import gmath
 import terrain
@@ -42,6 +43,8 @@ def run_game(screen, font):
     import main
     from gameselector import background_img
 
+    endline_image = pygame.transform.scale(pygame.image.load(os.path.join("assets", "Endline.png")), (500, 50))
+
     s_time = 0
     s_dist = 0
 
@@ -75,6 +78,7 @@ def run_game(screen, font):
         # The player must be rendered at last
         screen.blit(background_img, (0, s_dist % 800))
         screen.blit(background_img, (0, s_dist % 800 - 800))
+        if mode == 1: screen.blit(endline_image, (0, 575 - (lim - s_dist)))
         for entity in bikes_l + bikes_r: entity.render(screen, s_dist)
         for entity in walkers + riders: entity.render(screen)
         me.render(screen)
@@ -146,7 +150,7 @@ def run_game(screen, font):
                     if me.mode == 1: me.accelerate()
                 elif event.key == pygame.K_z:
                     if me.mode == 1: is_sc_left = True
-                elif event.key == pygame.K_SLASH:
+                elif event.key == pygame.K_x:
                     if me.mode == 1: is_sc_right = True
             elif event.type == pygame.KEYUP:
                 if event.key == pygame.K_UP:
@@ -164,7 +168,7 @@ def run_game(screen, font):
                     key_return_time = 0
                 elif event.key == pygame.K_z:
                     is_sc_left = False
-                elif event.key == pygame.K_SLASH:
+                elif event.key == pygame.K_x:
                     is_sc_right = False
 
         # Try get bike

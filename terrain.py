@@ -63,6 +63,7 @@ class npc_generator:
         self.last_pos = 0
 
     def generate_npcs(self, pos, delta_t):
+        if not delta_t: return
         self.rho += (pos - self.last_pos) * 5e-8
         if self.rho > self.rho_max: self.rho = self.rho_max
         prob = self.rho * (pos - self.last_pos)
