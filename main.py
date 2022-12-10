@@ -13,6 +13,7 @@ import titlepage
 import aboutpage
 import gameselector
 import game
+import bgm
 
 iconfile = pygame.image.load(os.path.join("assets", "Icon.png"))
 iconfile.blit(skin.player_skin, (20, 10))
@@ -30,6 +31,8 @@ while True:
     elif game_mode == 11:
         gameselector.execute(screen, font.font)
     elif game_mode == 114:
+        bgm.start_bgm()
         game.run_game(screen, font.font)
+        bgm.end_bgm()
     elif game_mode > 1000:
         game.game_over(screen, font.font, font.font_large)
