@@ -1,17 +1,16 @@
 @echo off
-chcp 936
 
 py main.py
 if ERRORLEVEL 1 (
-	py -m pip install pygame
+	py -m pip install -i https://pypi.tuna.tsinghua.edu.cn/simple pygame
 	if ERRORLEVEL 1 (
-		echo 运行错误！请检查你是否安装 python 3。
-		echo 若未安装，请在此下载并安装 python 3: https://www.python.org/downloads/release/python-3108
-		echo 请不要安装 python 3.11 及以上版本，因为 pygame 在这些版本下无法运行。
+		echo Error! Please check whether you have installed Python 3.
+		echo If not, please download Python 3 from https://www.python.org/downloads/release/python-3108 and install.
+		echo Please don't install Python 3.11, because Pygame is not compatible with this version.
 		pause
 		exit
 	)
-	py -m pip install numpy
-	py -m pip install numba
+	py -m pip install -i https://pypi.tuna.tsinghua.edu.cn/simple numpy
+	py -m pip install -i https://pypi.tuna.tsinghua.edu.cn/simple numba
 	py main.py
 )
